@@ -1,0 +1,22 @@
+.expense-details {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    margin:1rem;
+  }
+
+  .expense-details__loc{
+    color:rgb(172, 162, 162);
+  }
+  .expense-details__price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-width: 88px;
+    color: white;
+    background-color: #05b681;
+    border: 1px solid white;
+    padding: 0.5rem;
+    border-radius: 12px;
+  }
