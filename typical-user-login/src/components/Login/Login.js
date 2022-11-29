@@ -44,8 +44,8 @@ const userDataReducer = (state, action) => {
   return {
     email: "",
     pass: "",
-    emailIsValid: true,
-    passIsValid: true,
+    emailIsValid: null,
+    passIsValid: null,
   };
 };
 
@@ -56,8 +56,8 @@ const Login = (props) => {
   const [userData, dispatchUser] = useReducer(userDataReducer, {
     email: "",
     pass: "",
-    emailIsValid: true,
-    passIsValid: true,
+    emailIsValid: null,
+    passIsValid: null,
   });
 
   const emailChangeHandler = (event) => {
