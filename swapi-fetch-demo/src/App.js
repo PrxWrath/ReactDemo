@@ -2,6 +2,7 @@ import React, {useEffect, useState, useCallback} from 'react';
 
 import MoviesList from './components/MoviesList';
 import Loader from './components/Loader';
+import AddMovie from './components/AddMovie';
 import './App.css';
 
 function App() {
@@ -60,9 +61,16 @@ function App() {
   if(movies.length>0){
     content = <MoviesList movies={movies} />
   }
+  
+  const onAddMovie = useCallback((movie)=>{
+    console.log(movie);
+  },[])
 
   return (
     <React.Fragment>
+      <section>
+        <AddMovie onAddMovie={onAddMovie}/>
+      </section>
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
