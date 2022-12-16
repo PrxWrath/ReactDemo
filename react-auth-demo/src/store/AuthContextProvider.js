@@ -3,17 +3,18 @@ import { useState } from 'react';
 import authContext from './auth-context'; 
 
 const AuthContextProvider = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loginToken, setLoginToken] = useState(null);
+  const localToken = localStorage.getItem('LOGIN_TOKEN');
+  const [loginToken, setLoginToken] = useState(localToken);
+  const isLoggedIn = !!loginToken;
     
   const userLogin = (token) =>{
-    setIsLoggedIn(true);
     setLoginToken(token);
+    localStorage.setItem('LOGIN_TOKEN', token);
   }
 
   const userLogout = ()=>{
-    setIsLoggedIn(false);
     setLoginToken(null);
+    localStorage.clear();
   }
 
   return (
