@@ -1,6 +1,7 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useContext} from 'react';
 
 import classes from './AuthForm.module.css';
+import authContext from '../../store/auth-context';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,11 +9,13 @@ const AuthForm = () => {
   const emailRef = useRef();
   const passwordRef  = useRef();
 
+  const authCtx = useContext(authContext);
+
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
 
-  const submitHandler = useCallback(async(e) => {
+  const submitHandler = async(e) => {
     e.preventDefault();
     if(isLogin){
       try{
@@ -30,7 +33,7 @@ const AuthForm = () => {
         const data = await res.json();
 
         if(res.ok){
-          console.log('Token: ', data.idToken);
+          authCtx.userLogin(data.idToken);
         }else{
           throw new Error(data.error.errors[0].message)
         }
@@ -56,9 +59,13 @@ const AuthForm = () => {
             'Content-Type':'application/json'
           }
         })
-        if(!res.ok){
-          const data = await res.json();
+
+        const data = await res.json();
+        
+        if(!res.ok){  
           throw new Error(data.error.errors[0].message)
+        }else{
+          authCtx.userLogin(data.idToken)
         }
 
         emailRef.current.value = '';
@@ -69,7 +76,7 @@ const AuthForm = () => {
       }
       setWaiting(false);
     }
-  },[isLogin]);
+  };
 
   return (
     <section className={classes.auth}>
