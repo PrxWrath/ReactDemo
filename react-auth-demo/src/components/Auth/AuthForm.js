@@ -15,7 +15,32 @@ const AuthForm = () => {
   const submitHandler = useCallback(async(e) => {
     e.preventDefault();
     if(isLogin){
-      //handle login
+      try{
+        const res = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCr27y7q1JW2qG764N0ZftdsCSWEVZcoVc', {
+          method:'POST',
+          body:JSON.stringify({
+            email:emailRef.current.value,
+            password: passwordRef.current.value,
+            returnSecureToken: true
+          }),
+          headers:{
+            'Content-Type':'application/json'
+          }
+        })
+        const data = await res.json();
+
+        if(res.ok){
+          console.log('Token: ', data.idToken);
+        }else{
+          throw new Error(data.error.errors[0].message)
+        }
+
+        emailRef.current.value = '';
+        passwordRef.current.value = '';
+      
+    }catch(err){
+      alert(err.message);
+    }
     }
     else{
       setWaiting(true);
