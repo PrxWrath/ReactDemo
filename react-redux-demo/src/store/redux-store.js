@@ -14,8 +14,14 @@ const counterReducer = (state={counter:0}, action)=>{
         case 'decrementBy2': return{
             counter: state.counter-2
         }
+        case 'incrementBy5': return{
+            counter: state.counter+5
+        }
+        case 'decrementBy5': return{
+            counter: state.counter-5
+        }
+        default: return state
     }
-    return state;
 }
 const store = createStore(counterReducer);
 
