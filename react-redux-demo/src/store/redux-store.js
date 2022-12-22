@@ -3,22 +3,10 @@ import {createStore} from 'redux';
 const counterReducer = (state={counter:0}, action)=>{
     switch(action.type){
         case 'increment': return{
-            counter: state.counter+1
+            counter: state.counter+action.step
         }
         case 'decrement': return{
-            counter: state.counter-1
-        }
-        case 'incrementBy2': return{
-            counter: state.counter+2
-        }
-        case 'decrementBy2': return{
-            counter: state.counter-2
-        }
-        case 'incrementBy5': return{
-            counter: state.counter+5
-        }
-        case 'decrementBy5': return{
-            counter: state.counter-5
+            counter: state.counter-action.step
         }
         default: return state
     }
