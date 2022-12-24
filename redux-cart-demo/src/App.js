@@ -4,6 +4,7 @@ import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import Notification from './components/UI/Notification';
+import { cartActions } from './store/cartReducer';
 import { uiActions } from './store/uiReducer';
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
     async function updateCart(){
       if(cart.items.length){
         try{
-          dispatch(uiActions.loading());
+          dispatch(uiActions.notify({type:'loading', title:'Sending...', msg:'Sending Data!'}));
           let res = await fetch('https://react-http-demo-b17c2-default-rtdb.firebaseio.com/cart.json',{
             method:'PUT',
             body:JSON.stringify(cart),
@@ -25,19 +26,41 @@ function App() {
             }
           })
           if(res.ok){
-            dispatch(uiActions.success());
+            dispatch(uiActions.notify({type:'success', title:'Success!', msg:'Sent Data Successfully!'}));
           }else{
             throw new Error('failed');
           }
-          setTimeout(()=>{dispatch(uiActions.clear())}, 2000);
         }catch(err){
-          dispatch(uiActions.error());
-          setTimeout(()=>{dispatch(uiActions.clear())}, 2000);
+          dispatch(uiActions.notify({type:'error', title:'Error!', msg:'Sending Data Failed!'}));
         }
+        setTimeout(()=>{dispatch(uiActions.clear())}, 2000);
       }
     }
-    updateCart();
-  }, [cart]);
+    if(!cart.loaded){
+      updateCart();
+    }
+  }, [cart, dispatch]);
+  
+
+  useEffect(()=>{
+    async function loadCart(){
+      try{
+        dispatch(uiActions.notify({type:'loading', title:'Loading...', msg:'Loading Data!'}));
+        let res = await fetch('https://react-http-demo-b17c2-default-rtdb.firebaseio.com/cart.json')
+        let data = await res.json();
+        if(res.ok){
+          dispatch(uiActions.notify({type:'success', title:'Success!', msg:'Loaded Data Successfully!'}))
+          dispatch(cartActions.load({cartQty:data.cartQty, items:Object.values(data.items)}));
+        }else{
+          throw new Error('failed');
+        }
+      }catch(err){
+        dispatch(uiActions.notify({type:'error', title:'Error!', msg:'Loading Data Failed!'}));
+      }
+      setTimeout(()=>{dispatch(uiActions.clear())}, 2000);
+    }
+    loadCart();
+  },[dispatch])
 
   return (
     <>

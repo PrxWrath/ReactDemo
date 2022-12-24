@@ -7,25 +7,11 @@ const uiSlice = createSlice({
     toggleCart(state) {
       state.showCart = !state.showCart;
     },
-    loading(state){
+    notify(state,action){
       state.notification = {
-        type: 'loading',
-        title: 'Sending...',
-        msg: 'Sending Cart Data!'
-      }
-    },
-    error(state){
-      state.notification = {
-        type: 'error',
-        title: 'Error!',
-        msg: 'Sending Cart Data Failed!'
-      }
-    },
-    success(state){
-      state.notification = {
-        type: 'success',
-        title: 'Success!',
-        msg: 'Sent Cart Data Successfully!'
+        type: action.payload.type,
+        title: action.payload.title,
+        msg: action.payload.msg
       }
     },
     clear(state){
