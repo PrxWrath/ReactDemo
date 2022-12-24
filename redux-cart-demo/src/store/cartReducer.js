@@ -1,33 +1,34 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-const initialState = { items:[], total:0, showCart:false }
+const initialState = { items:[], cartQty:0 }
 const cartSlice = createSlice({
     name:'cart',
     initialState,
     reducers:{
         addItem(state, action){
-            if(!state.items.filter(item=>item.title===action.payload.title).length){
-                state.items = [action.payload, ...state.items];
-            }else{
-                state.items.forEach(item=>{
-                    if(item.title===action.payload.title){
-                        item.quantity+=1;
-                    }
+            const existing = state.items.find(item=>item.title===action.payload.title)
+            if(!existing){
+                state.items.push({
+                    title: action.payload.title,
+                    price: action.payload.price,
+                    total: action.payload.price,
+                    quantity: action.payload.quantity,
                 })
+            }else{
+                existing.quantity+=1;
+                existing.total+=action.payload.price
             }
-            state.total += action.payload.price;
+            state.cartQty += 1;
         },
         removeItem(state, action){
             if(action.payload.quantity===1){
                 state.items = [...state.items.filter(item=>item.title!==action.payload.title)]
             }else{
-                state.items.forEach(item=>{
-                    if(item.title===action.payload.title){
-                        item.quantity-=1;
-                    }
-                })
+                const existing = state.items.find(item=>item.title===action.payload.title)      
+                existing.quantity-=1;
+                existing.total-=action.payload.price;
             }
-            state.total -= action.payload.price;
+            state.cartQty -= 1;
         },
 
         toggleCart(state){

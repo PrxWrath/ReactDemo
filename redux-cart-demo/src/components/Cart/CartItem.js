@@ -1,10 +1,9 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { cartActions } from '../../store/cartReducer';
 import classes from './CartItem.module.css';
 
 const CartItem = (props) => {
-  const { title, quantity, price } = props.item;
-  const total = useSelector(state=>state.cart.total);
+  const { title, quantity, price, total } = props.item;
   const dispatch = useDispatch();
 
   const increaseQtyHandler = () => {
